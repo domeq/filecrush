@@ -153,9 +153,9 @@ public class Crush extends Configured implements Tool {
 	 * specification.
 	 */
 	private List<Matcher> matchers;
-	
+
 	/**
-	 * Regex from the --ignore-regex option used for filtering out files for crushing.  
+	 * Regex from the --ignore-regex option used for filtering out files for crushing.
 	 */
 	private Matcher ignoredFiles;
 
@@ -358,7 +358,7 @@ public class Crush extends Configured implements Tool {
 		} else {
 			console = Verbosity.NONE;
 		}
-		
+
 		if (cli.hasOption("ignore-regex")) {
       ignoredFiles = Pattern.compile(cli.getOptionValue("ignore-regex")).matcher("");
 		}
@@ -496,7 +496,7 @@ public class Crush extends Configured implements Tool {
 		 * Add the crush specs and compression options to the configuration.
 		 */
 		job.set("crush.timestamp", crushTimestamp);
-		
+
 		if (ignoredFiles != null) {
 			job.set("crush.ignore-regex", ignoredFiles.pattern().pattern());
 		}
@@ -605,7 +605,7 @@ public class Crush extends Configured implements Tool {
     }
     return old;
   }
-  
+
 	@Override
 	public int run(String[] args) throws Exception {
 
@@ -662,11 +662,13 @@ public class Crush extends Configured implements Tool {
 				throw new AssertionError(format("Files eligible (%d) != files crushed (%d)", eligible, crushed));
 			}
 
-			if (Mode.CLONE == mode) {
-				cloneOutput();
-			} else {
-				moveOutput();
-			}
+            if (eligible > 0) {
+                if (Mode.CLONE == mode) {
+                    cloneOutput();
+                } else {
+                    moveOutput();
+                }
+            }
 		}
 
 		print(Verbosity.INFO, "\n\nDeleting temporary directory");
@@ -728,7 +730,7 @@ public class Crush extends Configured implements Tool {
 		CrushReducer reducer = new CrushReducer();
 
 		reducer.configure(job);
-		reducer.reduce(bucket, files.iterator(), new NullOutputCollector<Text, Text>(), Reporter.NULL);		
+		reducer.reduce(bucket, files.iterator(), new NullOutputCollector<Text, Text>(), Reporter.NULL);
 		reducer.close();
 
 		/*
@@ -1048,7 +1050,7 @@ public class Crush extends Configured implements Tool {
 							ignoredFiles.reset(testPath.toUri().getPath());
 							return !ignoredFiles.matches();
 						}
-						
+
 					});
 
 					if (contents == null || contents.length == 0) {
