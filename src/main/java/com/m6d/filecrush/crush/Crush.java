@@ -662,12 +662,12 @@ public class Crush extends Configured implements Tool {
 				throw new AssertionError(format("Files eligible (%d) != files crushed (%d)", eligible, crushed));
 			}
 
-            if (eligible > 0) {
-                if (Mode.CLONE == mode) {
+            if (Mode.CLONE == mode) {
+                if (eligible > 0) {
                     cloneOutput();
-                } else {
-                    moveOutput();
                 }
+            } else {
+                moveOutput();
             }
 		}
 
